@@ -12,18 +12,13 @@ function initPage() {
     let searchHistory = JSON.parse(localStorage.getItem("search")) || [];
     console.log(searchHistory);
     
-
     const APIKey = "06094a9adf2fce406060432e618e8156";
-//  When search button is clicked, read the city name typed by the user
 
     function getWeather(cityName) {
-//  Using saved city name, execute a current condition get request from open weather map api
         let queryURL = "https://api.openweathermap.org/data/2.5/weather?q=" + cityName + "&appid=" + APIKey;
         axios.get(queryURL)
         .then(function(response){
             console.log(response);
-//  Parse response to display current conditions
-        //  Method for using "date" objects obtained from https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date
             const currentDate = new Date(response.data.dt*1000);
             console.log(currentDate);
             const day = currentDate.getDate();
@@ -47,12 +42,10 @@ function initPage() {
             currentUVEl.innerHTML = "UV Index: ";
             currentUVEl.append(UVIndex);
         });
-//  Using saved city name, execute a 5-day forecast get request from open weather map api
         let cityID = response.data.id;
         let forecastQueryURL = "https://api.openweathermap.org/data/2.5/forecast?id=" + cityID + "&appid=" + APIKey;
         axios.get(forecastQueryURL)
         .then(function(response){
-//  Parse response to display forecast for next 5 days underneath current conditions
             console.log(response);
             const forecastEls = document.querySelectorAll(".forecast");
             for (i=0; i<forecastEls.length; i++) {
