@@ -14,13 +14,13 @@ function initPage() {
     const historyEl = document.getElementById("history");
     let searchHistory = JSON.parse(localStorage.getItem("search")) || [];
     console.log(searchHistory);
-    const axios = require('axios');
+    // const axios = require('axios');
 
     const APIKey = "c1c64b4d63c526ebfecf051f0f609b5d";
 
     function getWeather(cityName) {
         let queryURL = "https://api.openweathermap.org/data/2.5/weather?q=" + cityName + "&appid=" + APIKey;
-        await axios.get(queryURL)
+        axios.get(queryURL)
             .then(function (response) {
                 console.log(response);
                 const currentDate = new Date(response.data.dt * 1000);
