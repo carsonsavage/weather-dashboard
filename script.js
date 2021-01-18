@@ -1,3 +1,5 @@
+const axios = require("axios");
+
 function initPage() {
     const inputEl = document.getElementById("city-input");
     const searchEl = document.getElementById("search-button");
@@ -18,7 +20,7 @@ function initPage() {
 
     function getWeather(cityName) {
         let queryURL = "https://api.openweathermap.org/data/2.5/weather?q=" + cityName + "&appid=" + APIKey;
-        axios.get(queryURL)
+        await axios.get(queryURL)
             .then(function (response) {
                 console.log(response);
                 const currentDate = new Date(response.data.dt * 1000);
