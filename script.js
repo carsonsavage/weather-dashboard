@@ -10,7 +10,6 @@ var searchHistoryArr = [];
 
 $(document).ready(function () {
     init();
-
     function init() {
         search();
         $('#current-forecast').hide();
@@ -23,7 +22,6 @@ $(document).ready(function () {
         clickHistory();
         currentLocationButton();
     }
-
     function search() {
         $('#search-button').on('click', function () {
             citySearch = $('#search-input')
@@ -37,10 +35,8 @@ $(document).ready(function () {
             getWeather(citySearch);
         });
     }
-
     function getWeather(search) {
         var queryURL = weatherAPI + 'q=' + search + units + APIkey;
-
         $.ajax({
             url: queryURL,
             method: 'GET',
@@ -55,7 +51,6 @@ $(document).ready(function () {
             $('#error-div').hide();
             $('#current-forecast').show();
             $('#five-day-forecast-container').show();
-
             var results = response;
             var name = results.name;
             var temperature = Math.floor(results.main.temp);
@@ -64,19 +59,15 @@ $(document).ready(function () {
             var date = new Date(results.dt * 1000).toLocaleDateString('en-US');
             var weatherIcon = results.weather[0].icon;
             var weatherIconURL = getWeatherIcon + weatherIcon + '.png';
-
             storeHistory(name);
-
             $('#city-name').text(name + ' (' + date + ') ');
             $('#weather-image').attr('src', weatherIconURL);
             $('#temperature').html('<b>Temperature: </b>' + temperature + ' °F');
             $('#humidity').html('<b>Humidity: </b>' + humidity + '%');
             $('#wind-speed').html('<b>Wind Speed: </b>' + windSpeed + ' MPH');
-
             var lat = response.coord.lat;
             var lon = response.coord.lon;
             var uviQueryURL = uviAPI + lat + '&lon=' + lon + APIkey;
-
             $.ajax({
                 url: uviQueryURL,
                 method: 'GET'
@@ -89,8 +80,6 @@ $(document).ready(function () {
                     uvi +
                     '</span>'
                 );
-
-                // DRY this out...
                 if (uvi < 3) {
                     $('#uvi-badge').css('background-color', 'green');
                 } else if (uvi < 6) {
@@ -103,19 +92,16 @@ $(document).ready(function () {
                     $('#uvi-badge').css('background-color', 'purple');
                 }
             });
-
             var cityName = name;
             var countryCode = response.sys.country;
             var forecastQueryURL =
                 forecastAPI + cityName + ',' + countryCode + units + APIkey;
-
             $.ajax({
                 url: forecastQueryURL,
                 method: 'GET'
             }).then(function (forecastResponse) {
                 var forecastResults = forecastResponse;
                 var forecastArr = [];
-
                 for (var i = 5; i < 40; i += 8) {
                     var forecastObj = {};
                     var forecastResultsDate = forecastResults.list[i].dt_txt;
@@ -125,23 +111,19 @@ $(document).ready(function () {
                     var forecastTemp = forecastResults.list[i].main.temp;
                     var forecastHumidity = forecastResults.list[i].main.humidity;
                     var forecastIcon = forecastResults.list[i].weather[0].icon;
-
                     forecastObj['list'] = {};
                     forecastObj['list']['date'] = forecastDate;
                     forecastObj['list']['temp'] = forecastTemp;
                     forecastObj['list']['humidity'] = forecastHumidity;
                     forecastObj['list']['icon'] = forecastIcon;
-
                     forecastArr.push(forecastObj);
                 }
-
                 for (var j = 0; j < 5; j++) {
                     var forecastArrDate = forecastArr[j].list.date;
                     var forecastIconURL =
                         getWeatherIcon + forecastArr[j].list.icon + '.png';
                     var forecastArrTemp = Math.floor(forecastArr[j].list.temp);
                     var forecastArrHumidity = forecastArr[j].list.humidity;
-
                     $('#date-' + (j + 1)).text(forecastArrDate);
                     $('#weather-image-' + (j + 1)).attr('src', forecastIconURL);
                     $('#temp-' + (j + 1)).text(
@@ -155,7 +137,6 @@ $(document).ready(function () {
             });
         });
     }
-
     function getCurrentLocation() {
         function success(position) {
             const currentLat = position.coords.latitude;
@@ -168,7 +149,6 @@ $(document).ready(function () {
                 currentLon +
                 units +
                 APIkey;
-
             $.ajax({
                 url: currentLocationQueryURL,
                 method: 'GET'
@@ -180,7 +160,6 @@ $(document).ready(function () {
                 var currentLocationIcon = currentLocationResults.weather[0].icon;
                 var currentLocationIconURL =
                     getWeatherIcon + currentLocationIcon + '.png';
-
                 $('#current-location').text(currentLocationName);
                 $('#weather-image-current-location').attr(
                     'src',
@@ -193,7 +172,6 @@ $(document).ready(function () {
                     '<b>Humidity: </b>' + currentLocationHumidity + '%'
                 );
             });
-
             $('#current-location-weather').show();
         }
 
@@ -258,13 +236,11 @@ $(document).ready(function () {
     function displayHistory() {
         var getLocalSearchHistory = localStorage.getItem('searchHistory');
         var localSearchHistory = JSON.parse(getLocalSearchHistory);
-
         if (getLocalSearchHistory === null) {
             createHistory();
             getLocalSearchHistory = localStorage.getItem('searchHistory');
             localSearchHistory = JSON.parse(getLocalSearchHistory);
         }
-
         for (var i = 0; i < localSearchHistory.length; i++) {
             var historyLi = $('<li>');
             historyLi.addClass('list-group-item');
