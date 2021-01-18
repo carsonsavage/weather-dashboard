@@ -1,5 +1,3 @@
-import axios from 'axios'
-
 function initPage() {
     const inputEl = document.getElementById("city-input");
     const searchEl = document.getElementById("search-button");
